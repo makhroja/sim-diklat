@@ -1,0 +1,175 @@
+<?php $__env->startSection('styles'); ?>
+
+<?php $__env->appendSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+<div id="content" class="container ">
+    <div class="row">
+        <div class="col-md-12 auth-form mx-auto my-auto ">
+            <div class="form-group mt-4"><br>
+                <h4 class="title-page text-center"><span style="color:#e8505b;font:bold;">REGISTRASI KEGIATAN
+                    </span><br><?php echo $kegiatan->nama_kegiatan; ?><br>
+                </h4>
+            </div>
+            <div class="card mt-4 mb-5">
+                <div class="card-header border-bottom bg-info">
+                    <?php /* <h5 class="m-0 text-center text-bold text-white">REGISTRASI</h5> */ ?>
+                </div>
+                <div class="card-body">
+                    <br>
+                    <?php echo Form::open(['route' => 'post.registrasi', 'autocomplete'=>'off','class'=>'form-horizontal']); ?>
+
+                    <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+                    <input type="hidden" name="kegiatan_id" value="<?php echo $kegiatan->id; ?>">
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-sm-6">
+                            <div class="form-group <?php echo $errors->has('sebagai') ? 'has-error' : ''; ?>">
+                                <label for=" exampleInputEmail1">Mendaftar Sebagai</label>
+                                <select onchange="myFunction()" id="sebagai" class="form-control col-md-7" name="sebagai">
+                                    <option value=""> -Pilih- </option>
+                                    <option value="Peserta" <?php if(Input::old('sebagai')=='Peserta' ): ?> selected="selected"
+                                        <?php endif; ?>> Peserta </option>
+                                    <option value="Narasumber" <?php if(Input::old('sebagai')=='Narasumber' ): ?> selected="selected"
+                                        <?php endif; ?>> Narasumber </option>
+                                    <option value="Moderator" <?php if(Input::old('sebagai')=='Moderator' ): ?> selected="selected"
+                                        <?php endif; ?>> Moderator </option>
+                                    <option value="Panitia" <?php if(Input::old('sebagai')=='Panitia' ): ?> selected="selected"
+                                        <?php endif; ?>> Panitia </option>
+                                    <option value="Penyaji" <?php if(Input::old('sebagai')=='Penyaji' ): ?> selected="selected"
+                                        <?php endif; ?>> Penyaji </option>
+                                    <option value="Akademisi" <?php if(Input::old('sebagai')=='Akademisi' ): ?> selected="selected"
+                                        <?php endif; ?>> Akademisi </option>
+                                </select>
+                                <?php echo $errors->first('jk', '<small class="help-block text-danger">:message</small>'); ?>
+
+                            </div>
+                            <div id="div-token" class="form-group <?php echo $errors->has('token') ? 'has-error' : ''; ?>">
+                                <label for=" exampleInputEmail1">Token</label>
+                                <input value="<?php echo Input::old('token'); ?>" type="text" class="form-control"
+                                    id="token" name="token">
+                                <small class="help-block text-muted">kosongkan jika anda mendaftar sebagai peserta PESERTA </small>
+                                <?php echo $errors->first('token', '<small class="help-block text-danger">:message</small>'); ?>
+
+                            </div>
+                            <div class="form-group'' }} text-center">
+	 	<img width="100%" src="<?php echo url('/public/assets/images/ejaan-benar.png'); ?>">
+                            </div>
+                            <div class="form-group <?php echo $errors->has('nama_lengkap') ? 'has-error' : ''; ?>">
+                                <label for=" exampleInputEmail1">Nama Lengkap</label>
+                                <input value="<?php echo Input::old('nama_lengkap'); ?>" type="text" class="form-control"
+                                    id="nama_lengkap" name="nama_lengkap">
+                                <small class="help-block text-muted">isi dengan lengkap guna pembuatan
+                                    sertifikat</small>
+                                <?php echo $errors->first('nama_lengkap', '<small class="help-block text-danger">:message</small>'); ?>
+
+                            </div>
+                            <div class="form-group <?php echo $errors->has('jk') ? 'has-error' : ''; ?>">
+                                <label for=" exampleInputEmail1">Jenis Kelamin</label>
+                                <select id="inputState" class="form-control col-md-7" name="jk">
+                                    <option value=""> -Pilih- </option>
+                                    <option value="Laki-laki" <?php if(Input::old('jk')=='Laki-laki' ): ?> selected="selected"
+                                        <?php endif; ?>> Laki-laki </option>
+                                    <option value="Perempuan" <?php if(Input::old('jk')=='Perempuan' ): ?> selected="selected"
+                                        <?php endif; ?>> Perempuan </option>
+                                </select>
+                                <?php echo $errors->first('jk', '<small class="help-block text-danger">:message</small>'); ?>
+
+                            </div>
+                            <div class="form-group <?php echo $errors->has('instansi') ? 'has-error' : ''; ?>">
+                                <label for="exampleInputEmail1">Instansi</label>
+                                <textarea value="" type="text" class="form-control" id="instansi"
+                                    name="instansi"><?php echo Input::old('instansi'); ?></textarea>
+                                <?php echo $errors->first('instansi', '<small class="help-block text-danger">:message</small>'); ?>
+
+                            </div>
+                            <div class="form-group <?php echo $errors->has('jabatan') ? 'has-error' : ''; ?>">
+                                <label for="exampleInputEmail1">Jabatan</label>
+                                <input value="<?php echo Input::old('jabatan'); ?>" type="text" class="form-control" id="jabatan"
+                                    name="jabatan">
+                                <?php echo $errors->first('jabatan', '<small class="help-block text-danger">:message</small>'); ?>
+
+                            </div>
+                            <div class="form-group <?php echo $errors->has('no_hp') ? 'has-error' : ''; ?>">
+                                <label for="exampleInputEmail1">No HP</label>
+                                <input value="<?php echo Input::old('no_hp'); ?>" type="text" class="form-control col-md-5"
+                                    id="no_hp" name="no_hp">
+                                <?php echo $errors->first('no_hp', '<small class="help-block text-danger">:message</small>'); ?>
+
+                            </div>
+                            <div class="form-group <?php echo $errors->has('email') ? 'has-error' : ''; ?>">
+                                <label for="exampleInputEmail1">Email</label>
+                                <input value="<?php echo Input::old('email'); ?>" type="email" class="form-control col-md-7"
+                                    id="email" name="email">
+                                <?php echo $errors->first('email', '<small class="help-block text-danger">:message</small>'); ?>
+
+                            </div>
+                            <div class="form-group <?php echo $errors->has('alamat') ? 'has-error' : ''; ?>">
+                                <label for="exampleInputEmail1">Alamat</label>
+                                <textarea value="" type="text" class="form-control" id="alamat"
+                                    name="alamat"><?php echo Input::old('alamat'); ?></textarea>
+                                <?php echo $errors->first('alamat', '<small class="help-block text-danger">:message</small>'); ?>
+
+                            </div>
+                            <div class="form-group <?php echo $errors->has('kabkota') ? 'has-error' : ''; ?>">
+                                <label for="exampleInputEmail1">Kabupaten/Kota</label>
+                                <input value="<?php echo Input::old('kabkota'); ?>" type="text" class="form-control col-md-8"
+                                    id="kabkota" name="kabkota">
+                                <?php echo $errors->first('kabkota', '<small class="help-block text-danger">:message</small>'); ?>
+
+                            </div>
+                            <div class="form-group <?php echo $errors->has('provinsi') ? 'has-error' : ''; ?>">
+                                <label for="exampleInputEmail1">Porvinsi</label>
+                                <input value="<?php echo Input::old('provinsi'); ?>" type="text" class="form-control col-md-8"
+                                    id="provinsi" name="provinsi">
+                                <?php echo $errors->first('provinsi', '<small class="help-block text-danger">:message</small>'); ?>
+
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <?php echo Form::captcha(); ?>
+
+                                <?php echo $errors->first('g-recaptcha-response', '<small class="help-block text-danger">The recaptcha field is not correct.</small>'); ?>
+
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                    <?php echo Form::close(); ?>
+
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+    </div>
+</div>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('scripts'); ?>
+<!-- select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+      $('#select2').select2({
+        theme: 'bootstrap4',
+      });
+    });
+</script>
+<script>
+    $("#div-token").hide();
+    function myFunction() {
+        var x = document.getElementById('sebagai').value;
+        if (x !== 'Peserta') {
+            $("#div-token").show();
+        }else{
+            $("#div-token").hide();
+        }
+    }
+</script>
+<?php $__env->appendSection(); ?>
+<?php echo $__env->make('layouts.site', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

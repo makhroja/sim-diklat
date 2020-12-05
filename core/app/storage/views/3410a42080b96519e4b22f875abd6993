@@ -1,0 +1,107 @@
+<?php if(count($errors->all()) > 0): ?>
+<div class="alert alert-danger alert-dismissible fade show mb-0">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="text-white"><i class="fa fa-ban"></i> Error</h4>
+    <h5 class="message text-white">Please check the form below for errors</h5>
+</div>
+<?php endif; ?>
+
+<?php if($message = Session::get('success')): ?>
+<div class="alert alert-success alert-dismissible fade show mb-0">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="text-white"><i class="fa fa-check"></i> Success</h4>
+    <h5 class="message text-white">
+        <?php if(is_array($message)): ?>
+        <?php foreach($message as $m): ?>
+        <?php echo $m; ?>
+
+        <?php endforeach; ?>
+        <?php else: ?>
+        <?php echo $message; ?>
+
+        <?php endif; ?>
+    </h5>
+</div>
+<?php endif; ?>
+
+<?php if($message = Session::get('error')): ?>
+<div class="alert alert-danger alert-dismissible fade show mb-0">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <h4 class="text-white"><i class="fa fa-ban"></i> Error</h4>
+    <h5 class="message text-white">
+        <?php if(is_array($message)): ?>
+        <?php foreach($message as $m): ?>
+        <?php echo $m; ?>
+
+        <?php endforeach; ?>
+        <?php else: ?>
+        <?php echo $message; ?>
+
+        <?php endif; ?>
+    </h5>
+</div>
+<?php endif; ?>
+
+<?php if($message = Session::get('warning')): ?>
+<div class="alert alert-warning alert-dismissible fade show mb-0">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="text-white"><i class="fa fa-exclamation-circle"></i> Warning</h4>
+    <h5 class="message text-white">
+        <?php if(is_array($message)): ?>
+        <?php foreach($message as $m): ?>
+        <?php echo $m; ?>
+
+        <?php endforeach; ?>
+        <?php else: ?>
+        <?php echo $message; ?>
+
+        <?php endif; ?>
+    </h5>
+</div>
+<?php endif; ?>
+
+<?php if($message = Session::get('notice')): ?>
+<div class="alert alert-warning alert-dismissible fade show mb-0">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="text-white"><i class="fa fa-exclamation-circle"></i> Notice</h4>
+    <h5 class="message text-white">
+        <?php if(is_array($message)): ?>
+        <?php foreach($message as $m): ?>
+        <?php echo $m; ?>
+
+        <?php endforeach; ?>
+        <?php else: ?>
+        <?php echo $message; ?>
+
+        <?php endif; ?>
+    </h5>
+</div>
+<?php endif; ?>
+
+<?php if($message = Session::get('info')): ?>
+<div class="alert alert-info alert-dismissible fade show mb-0">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="text-white"><i class="fa fa-info-circle"></i> Info</h4>
+    <h5 class="message text-white">
+        <?php if(is_array($message)): ?>
+        <?php foreach($message as $m): ?>
+        <?php echo $m; ?>
+
+        <?php endforeach; ?>
+        <?php else: ?>
+        <?php echo $message; ?>
+
+        <?php endif; ?>
+    </h5>
+</div>
+<?php endif; ?>

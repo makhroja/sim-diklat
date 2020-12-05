@@ -1,0 +1,53 @@
+/* For datatable custom style */
+
+.dataTables_wrapper {
+    font-size: 14px
+}
+
+.select2-selection__rendered {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.select2-results__option {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+
+/* For datatable responsive */
+
+table.dataTable th:nth-child(1) {
+    width: 25px;
+    max-width: 15%;
+    word-break: break-all;
+    white-space: pre-line;
+}
+
+table.dataTable td:nth-child(1) {
+    width: 25px;
+    max-width: 15%;
+    word-break: break-all;
+    white-space: pre-line;
+}
+
+
+/* For youtube embed responsive */
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px;
+    height: 0;
+    overflow: hidden;
+}
+
+.video-container iframe,
+.video-container object,
+.video-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
