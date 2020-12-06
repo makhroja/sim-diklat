@@ -69,6 +69,7 @@ Route::group(['before' => 'auth'], function () {
 	Route::post('/peserta/update',  ['as' => 'update.peserta', 'uses' => 'PesertaController@update']);
 	Route::get('/peserta/{id}/delete', 'PesertaController@delete');
 	Route::get('/api-peserta', ['as' => 'api.peserta', 'uses' => 'PesertaController@api_peserta']);
+	Route::get('/api-peserta/{kegiatan_id}', ['as' => 'api.peserta-kegiatan', 'uses' => 'PesertaController@api_peserta']);
 	Route::get('/peserta/post-kehadiran/{id}', ['as' => 'post.kehadiran', 'uses' => 'PesertaController@post_kehadiran']);
 
 	#Import Peserta

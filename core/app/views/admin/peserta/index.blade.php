@@ -1,12 +1,17 @@
 @extends('layouts.app')
 @push('styles')
+<!-- select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 
+<!-- select2-bootstrap4-theme -->
+<link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css"
+	rel="stylesheet"> <!-- for live demo page -->
 @endpush
 
 @section('content')
 
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-12 mb-4">
     <div class="btn-group" role="group">
 	      <a class="btn btn-primary" href="{{url('/peserta/create')}}" type="button" class="btn btn-primary various fancybox.ajax">
         <i class="material-icons">add_circle_outline</i> Create</a>
@@ -20,10 +25,24 @@
         <i class="material-icons">system_update_alt</i> Download Template Import</a>
     </div>
   </div>
-</div>
-<br>
-<ul class="list-group list-group-flush">
 
+  <div class="col-md-7">
+    <div class="form-group {{ $errors->has('kegiatan_id') ? 'has-error' : '' }}">
+      <select size="1" class="form-control" id="kegiatan_id" name="kegiatan_id">
+        <option value="">No Selected</option>
+        @foreach ($kegiatan as $item)
+        <option value="{{$item->id}}">{{$item->nama_kegiatan}}</option>
+        @endforeach
+      </select>
+      {{ $errors->first('kegiatan_id', '<span class="help-block">:message</span>') }}
+    </div>
+  </div>
+  <div class="col-md-5">
+    <a onclick="drawTable()" class="btn btn-warning text-white">Lihat</a>
+  </div>
+</div>
+
+<ul class="list-group list-group-flush">
   <table id="datatable" class="table table-sm mb-0 dt-responsive wrap" style="width:100%;font-size=12px">
     <thead class="bg-light">
       <tr>
@@ -31,10 +50,9 @@
         <th style="width:20%;">Kegiatan</th>
         <th>Nama Peserta</th>
         <th>Instansi</th>
-        <th>Jabatan</th>
         <th>No Hp</th>
         <th>Email</th>
-        <th>Alamat</th>
+        <th>Token</th>
         <th>Hadir</th>
         <th>Action</th>
       </tr>
@@ -46,11 +64,21 @@
 @endsection
 
 @section('scripts')
+<!-- select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+<script>
+	$(document).ready(function() {
+      $('#kegiatan_id').select2({
+        theme: 'bootstrap4',
+      });
+    });
+</script>
 <script type="text/javascript" language="javascript">
   var table = $('#datatable').DataTable({
     processing: true,
     serverSide: true,
-    ajax: "{{ route ('api.peserta') }}",
+    ajax: '/sim-diklat/api-peserta/' + kegiatan_id,
     columns: [{
         data: 'null',
         name: 'null',
@@ -72,10 +100,6 @@
         name: 'instansi',
       },
       {
-        data: 'jabatan',
-        name: 'jabatan',
-      },
-      {
         data: 'no_hp',
         name: 'no_hp',
       },
@@ -84,8 +108,8 @@
         name: 'email',
       },
       {
-        data: 'alamat',
-        name: 'alamat',
+        data: 'token',
+        name: 'token',
       },
       {
         data: 'kehadiran',
@@ -133,5 +157,16 @@
       }
     });
   });
+</script>
+
+<script>
+  function drawTable() {
+     var kegiatan_id = $("#kegiatan_id").val();
+     if (kegiatan_id == '') {
+         alert('Inputan tidak boleh kosong');
+     } else {
+         table.ajax.url('/sim-diklat/api-peserta/' + kegiatan_id).load();
+     }
+ }
 </script>
 @endsection

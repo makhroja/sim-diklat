@@ -13,7 +13,11 @@ class PesertaController extends BaseController
 		// print_r($data->kegiatan->nama_kegiatan);
 		// die();
 		$data['title'] = 'Peserta';
-		return View::make('admin.peserta.index', $data);
+		$kegiatan = Kegiatan::all();
+		return View::make('admin.peserta.index', [
+			'data' => $data,
+			'kegiatan' => $kegiatan
+		]);
 	}
 
 	public function registrasi($kegiatan_id)
@@ -290,9 +294,16 @@ class PesertaController extends BaseController
 		return Redirect::to('/peserta')->with('success', 'Data berhasil dihapus');
 	}
 
-	public function api_peserta()
+	public function api_peserta($kegiatan_id = '')
 	{
-		$query = Peserta::query()->orderBy('id', 'desc');
+		if ($kegiatan_id != '') {
+
+			$query = Peserta::where('kegiatan_id', $kegiatan_id)->orderBy('id', 'desc');
+		} else {
+
+			$query = Peserta::query()->orderBy('id', 'desc');
+		}
+
 		return Datatables::of($query)
 			->addColumn('kegiatan_id', function ($query) {
 				return $query->kegiatan->nama_kegiatan;
