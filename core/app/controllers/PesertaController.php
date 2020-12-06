@@ -190,6 +190,15 @@ class PesertaController extends BaseController
 		], 200);
 	}
 
+	public function forget_token($hp_email)
+	{
+		$peserta = Peserta::where('email', $hp_email)
+		->orWhere('no_hp', $hp_email)->firstOrFail();
+		return Response::make([
+			'token' => $peserta->token
+		]);
+	}
+	
 	public function create()
 	{
 		$data['title'] = 'Tambah Peserta';
