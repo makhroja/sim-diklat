@@ -11,6 +11,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link link rel="shortcut icon" href="{{url('public/assets/images/favicon.ico') }}">
   <link rel="stylesheet" href="{{url('public/assets/css/bootstrap.min.css')}}">
   <link rel="stylesheet" id="main-stylesheet" data-version="1.1.0"
     href="{{ url('public/shard/styles/shards-dashboards.1.1.0.min.css') }}">
