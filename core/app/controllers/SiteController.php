@@ -17,7 +17,7 @@ class SiteController extends BaseController
     {
         // return View::make('site.certificate');
 
-        $kegiatan = Kegiatan::where('visible', 1)->orderBy('id', 'desc')->simplePaginate(6);
+        $kegiatan = Kegiatan::where('visible', 1)->orderBy('status', 'desc')->simplePaginate(6);
         // return $kegiatan;
         return View::make('site.list', ['kegiatan' => $kegiatan]);
     }
