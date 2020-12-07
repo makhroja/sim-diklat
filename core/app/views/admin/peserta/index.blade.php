@@ -28,7 +28,7 @@
   <div class="col-md-7">
     <div class="form-group {{ $errors->has('kegiatan_id') ? 'has-error' : '' }}">
       <select size="1" class="form-control" id="kegiatan_id" name="kegiatan_id">
-        <option value="">Lihat Semua</option>
+        <option value="0">Lihat Semua</option>
         @foreach ($kegiatan as $item)
         <option value="{{$item->id}}">{{$item->nama_kegiatan}}</option>
         @endforeach
@@ -166,11 +166,7 @@
 <script>
   $("#kegiatan_id").change(function() {
     var kegiatan_id = $("#kegiatan_id").val();
-    if (kegiatan_id == '') {
-      alert('Inputan tidak boleh kosong');
-    } else {
-      table.ajax.url('/sim-diklat/api-peserta/' + kegiatan_id).load();
-    }
+    table.ajax.url('/sim-diklat/api-peserta/' + kegiatan_id).load();
   });
 </script>
 @endsection

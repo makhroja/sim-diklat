@@ -307,7 +307,7 @@ class PesertaController extends BaseController
 
 	public function api_peserta($kegiatan_id = '')
 	{
-		if ($kegiatan_id != '') {
+		if ($kegiatan_id != '' and $kegiatan_id != 0) {
 			$query = Peserta::where('kegiatan_id', $kegiatan_id)->orderBy('nama_lengkap', 'asc');
 		} else{
 			$query = Peserta::query()->orderBy('nama_lengkap', 'asc');
