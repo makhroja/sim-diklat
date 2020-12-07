@@ -27,10 +27,10 @@
             </form>
             <div class="form-group">
               <!-- Button trigger modal -->
-              <span type="button" class="btn btn-pill text-primary" data-toggle="modal"
+            <a href="{{url('/forget-token')}}" class="btn btn-pill text-primary" data-toggle="modal"
                 data-target="#exampleModalCenter">
                 Lupa token? klik disini.
-              </span>
+              </a>
             </div>
           </div>
           <div class="table-responsive mt-5">
@@ -55,33 +55,6 @@
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Lupa Token</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body text-center">
-        <label for="">Masukan No Hp/Email dibawah ini</label>
-        <input id="hp_email" name="hp_email" type="text" class="text-center form-control form-control-lg input-border"
-          autocomplete="off">
-        <br>
-        <button onclick="confirm_hp_email()" id="checkin" class="btn btn-warning text-white kehadiran">
-          <i class="material-icons">check_circle_outline </i> Confirm
-        </button>
-      </div>
-      <div class="modal-footer">
-        <input style="border: 0px none;" id="token_result" name="token_result" type="text" class="text-center form-control form-control-lg input-border bg-white"
-        autocomplete="off" readonly>
-      </div>
-    </div>
-  </div>
-</div>
 @endsection
 
 @push('scripts')

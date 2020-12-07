@@ -190,12 +190,11 @@ class PesertaController extends BaseController
 		], 200);
 	}
 
-	public function forget_token($hp_email)
+	public function forget_token()
 	{
-		$peserta = Peserta::where('email', $hp_email)
-			->orWhere('no_hp', $hp_email)->firstOrFail();
-		return Response::make([
-			'token' => $peserta->token
+		$kegiatan = Kegiatan::orderBy('created_at', 'desc')->get();
+		return View::make('site.forget_token', [
+			'kegiatan' => $kegiatan
 		]);
 	}
 
@@ -340,6 +339,24 @@ class PesertaController extends BaseController
 
 				return $kehadiran;
 			})
+			->addColumn('null', function () {
+				$null = '';
+				return $null;
+			})
+			->make(true);
+	}
+
+
+	public function api_forget_token($kegiatan_id = '0')
+	{
+		if ($kegiatan_id != '0') {
+			$query = Peserta::where('kegiatan_id', $kegiatan_id)->select('nama_lengkap', 'instansi', 'token')->orderBy('nama_lengkap', 'asc');
+		} else{
+			$query = Peserta::where('kegiatan_id', $kegiatan_id)->orderBy('nama_lengkap', 'asc');
+		} 
+
+		return Datatables::of($query)
+
 			->addColumn('null', function () {
 				$null = '';
 				return $null;

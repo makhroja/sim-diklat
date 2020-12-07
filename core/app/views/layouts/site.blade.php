@@ -5,8 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>SIM-DIKLAT | PP PAUD dan Dikmas Provinsi Jawa Tengah</title>
-  <meta name="description"
-    content="Sistem Informasi Managemen Diklat PP PAUD dan Dikmas Provinsi Jawa Tengah">
+  <meta name="description" content="Sistem Informasi Managemen Diklat PP PAUD dan Dikmas Provinsi Jawa Tengah">
   <meta name="csrf-token" content="{{csrf_token()}}">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
@@ -87,6 +86,10 @@
                 <a class="nav-link text-white" href="{{url('/verification')}}"><i
                     class="material-icons text-white">done_all</i> Cek
                   Sertifikat</a>
+              </li>
+              <li class="nav-item @if (Request::segment(1) == 'forget-token') active @endif">
+                <a class="nav-link text-white" href="{{url('/forget-token')}}"><i
+                    class="material-icons text-white">tab </i> Lupa Token</a>
               </li>
             </ul>
           </div>

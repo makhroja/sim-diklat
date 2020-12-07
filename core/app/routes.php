@@ -37,7 +37,9 @@ Route::get('/registrasi-success/{token}', ['as' => 'registrasi-success', 'uses' 
 Route::get('/kehadiran/{kegiatan_id}',  'PesertaController@kehadiran');
 Route::post('/kehadiran',  ['as' => 'check.in', 'uses' => 'PesertaController@check_in']);
 Route::get('/kehadiran/{kegiatan_id}/json',  ['as' => 'get.kehadiran', 'uses' => 'PesertaController@get_kehadiran']);
-Route::get('/forget-token/{hp_email}',  ['as' => 'forget.token', 'uses' => 'PesertaController@forget_token']);
+
+Route::get('/forget-token',  ['as' => 'forget.token', 'uses' => 'PesertaController@forget_token']);
+Route::get('/forget-token/{kegiatan_id}',  ['as' => 'api-forget.token', 'uses' => 'PesertaController@api_forget_token']);
 
 Route::get('/login', 'UserController@login');
 Route::post('/login', ['as' => 'get.login', 'uses' => 'UserController@get_login']);
