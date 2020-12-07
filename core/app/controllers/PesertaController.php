@@ -13,7 +13,7 @@ class PesertaController extends BaseController
 		// print_r($data->kegiatan->nama_kegiatan);
 		// die();
 		$data['title'] = 'Peserta';
-		$kegiatan = Kegiatan::all();
+		$kegiatan = Kegiatan::orderBy('created_at', 'desc')->get();
 		return View::make('admin.peserta.index', [
 			'data' => $data,
 			'kegiatan' => $kegiatan
@@ -193,12 +193,12 @@ class PesertaController extends BaseController
 	public function forget_token($hp_email)
 	{
 		$peserta = Peserta::where('email', $hp_email)
-		->orWhere('no_hp', $hp_email)->firstOrFail();
+			->orWhere('no_hp', $hp_email)->firstOrFail();
 		return Response::make([
 			'token' => $peserta->token
 		]);
 	}
-	
+
 	public function create()
 	{
 		$data['title'] = 'Tambah Peserta';
@@ -300,18 +300,18 @@ class PesertaController extends BaseController
 	public function delete($id)
 	{
 		Peserta::findOrFail($id)->delete();
-		return Redirect::to('/peserta')->with('success', 'Data berhasil dihapus');
+		return Response::make([
+			'success' => 'Peserta berhasil dihapus'
+		]);
 	}
 
 	public function api_peserta($kegiatan_id = '')
 	{
 		if ($kegiatan_id != '') {
-
-			$query = Peserta::where('kegiatan_id', $kegiatan_id)->orderBy('id', 'desc');
-		} else {
-
-			$query = Peserta::query()->orderBy('id', 'desc');
-		}
+			$query = Peserta::where('kegiatan_id', $kegiatan_id)->orderBy('nama_lengkap', 'asc');
+		} else{
+			$query = Peserta::query()->orderBy('nama_lengkap', 'asc');
+		} 
 
 		return Datatables::of($query)
 			->addColumn('kegiatan_id', function ($query) {
@@ -322,9 +322,9 @@ class PesertaController extends BaseController
 				<a type="button" href="peserta/' . $query->id . '/edit" class="iframe cboxElement btn btn-white">
 				  <i class="material-icons">edit</i>
 				</a>
-				<a type="button" href="peserta/' . $query->id . '/delete" Onclick="return ConfirmDelete();"  class="btn btn-danger">
+				<button type="button"  data-id="' . $query->id . '"  class="delete btn btn-danger">
 				  <i class="material-icons">delete</i>
-				</a>
+				</button>
 				</div>';
 
 				return $btn;

@@ -2,10 +2,9 @@
 @push('styles')
 <!-- select2 -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 <!-- select2-bootstrap4-theme -->
-<link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css"
-	rel="stylesheet"> <!-- for live demo page -->
+<link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet"> <!-- for live demo page -->
 @endpush
 
 @section('content')
@@ -13,7 +12,7 @@
 <div class="row">
   <div class="col-md-12 mb-4">
     <div class="btn-group" role="group">
-	      <a class="btn btn-primary" href="{{url('/peserta/create')}}" type="button" class="btn btn-primary various fancybox.ajax">
+      <a class="btn btn-primary" href="{{url('/peserta/create')}}" type="button" class="btn btn-primary various fancybox.ajax">
         <i class="material-icons">add_circle_outline</i> Create</a>
       <a class="btn btn-primary" href="{{url('/peserta/import-peserta')}}" type="button">
         <i class="material-icons">import_export</i> Import</a>
@@ -29,16 +28,13 @@
   <div class="col-md-7">
     <div class="form-group {{ $errors->has('kegiatan_id') ? 'has-error' : '' }}">
       <select size="1" class="form-control" id="kegiatan_id" name="kegiatan_id">
-        <option value="">No Selected</option>
+        <option value="">Lihat Semua</option>
         @foreach ($kegiatan as $item)
         <option value="{{$item->id}}">{{$item->nama_kegiatan}}</option>
         @endforeach
       </select>
       {{ $errors->first('kegiatan_id', '<span class="help-block">:message</span>') }}
     </div>
-  </div>
-  <div class="col-md-5">
-    <a onclick="drawTable()" class="btn btn-warning text-white">Lihat</a>
   </div>
 </div>
 
@@ -66,13 +62,13 @@
 @section('scripts')
 <!-- select2 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script>
-	$(document).ready(function() {
-      $('#kegiatan_id').select2({
-        theme: 'bootstrap4',
-      });
+  $(document).ready(function() {
+    $('#kegiatan_id').select2({
+      theme: 'bootstrap4',
     });
+  });
 </script>
 <script type="text/javascript" language="javascript">
   var table = $('#datatable').DataTable({
@@ -123,19 +119,27 @@
       },
     ],
   });
-
-  function drawTable() {
-    table.ajax.reload();
-  }
 </script>
 <script>
-  function ConfirmDelete() {
+  $('body').on('click', '.delete', function() {
+    var id = $(this).data("id");
     var result = confirm("Are you sure you want to delete?");
     if (result)
-      return true;
+      $.ajax({
+        url: "{{ url('/peserta') }}" + '/' + id + '/delete',
+        success: function(data) {
+          toastr.success('Peserta berhasil dihapus');
+          console.log(data)
+          table.draw();
+        },
+        error: function(data) {
+          toastr.success('Oops Something went wrong!');
+          console.log(data);
+        }
+      });
     else
       return false;
-  }
+  });
 </script>
 
 <script>
@@ -146,10 +150,10 @@
     $.ajax({
       url: "{{ url('/peserta/post-kehadiran') }}" + '/' + id,
       success: function(data) {
-        if($(this).is(":checked")) {
-            // checkbox is checked -> do something
+        if ($(this).is(":checked")) {
+          // checkbox is checked -> do something
         } else {
-            // checkbox is not checked -> do something different
+          // checkbox is not checked -> do something different
         }
       },
       error: function(data) {
@@ -160,13 +164,13 @@
 </script>
 
 <script>
-  function drawTable() {
-     var kegiatan_id = $("#kegiatan_id").val();
-     if (kegiatan_id == '') {
-         alert('Inputan tidak boleh kosong');
-     } else {
-         table.ajax.url('/sim-diklat/api-peserta/' + kegiatan_id).load();
-     }
- }
+  $("#kegiatan_id").change(function() {
+    var kegiatan_id = $("#kegiatan_id").val();
+    if (kegiatan_id == '') {
+      alert('Inputan tidak boleh kosong');
+    } else {
+      table.ajax.url('/sim-diklat/api-peserta/' + kegiatan_id).load();
+    }
+  });
 </script>
 @endsection
