@@ -75,6 +75,11 @@ class SiteController extends BaseController
         }
 
         $kegiatan = Kegiatan::findOrFail($peserta->kegiatan_id);
+        if ($kegiatan->sertifikat == 0) {
+            return View::make('errors.sertifikat',[
+                'kegiatan' => $kegiatan
+            ]);
+        }
         $qrcode = base64_encode(QrCode::format('png')->backgroundColor(255, 255, 255)->size(115)->errorCorrection('H')->generate('pauddikmasjateng.kemdikbud.go.id/certificate/verification/' . $peserta->token . ''));
 		if($kegiatan->no_sertifikat != ''){
 			$no_sertifikat = $kegiatan->no_sertifikat . '/' . $peserta->token;
