@@ -57,13 +57,13 @@ class SiteController extends BaseController
     {
         $data = Input::get('data');
         try {
-            $peserta = Peserta::where('token', $data)->firstOrFail();
+            $peserta = Peserta::where('token', $data)->where('kehadiran', 1)->firstOrFail();
             return View::make('site.result_verification', [
                 'peserta' => $peserta,
                 'no_sertifikat' => Input::get('data'),
             ]);
         } catch (\Exception $e) {
-            return Redirect::to('/verification')->with('verification-failed', 'Data tidak ditemukan');
+            return Redirect::to('/verification')->with('error', 'Mohon maaf anda bukan penerima sertifikat, pastikan anda melakukan presensi pada waktu yang sudah di tentukan');
         }
     }
 
