@@ -211,7 +211,7 @@ class PesertaController extends BaseController
 
 		$rules = array(
 			'kegiatan_id' => 'required|numeric',
-			'no_sertifikat' => 'required',
+			//'no_sertifikat' => 'required',
 			'sebagai' => 'required',
 			'nama_lengkap' => 'required',
 			'jk' => 'required',
@@ -271,7 +271,7 @@ class PesertaController extends BaseController
 		$rules = array(
 			'id' => 'required|numeric',
 			'kegiatan_id' => 'required|numeric',
-			'no_sertifikat' => 'required',
+			//'no_sertifikat' => 'required',
 			'sebagai' => 'required',
 			'nama_lengkap' => 'required',
 			'jk' => 'required',
