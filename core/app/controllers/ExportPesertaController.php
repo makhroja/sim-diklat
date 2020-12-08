@@ -21,14 +21,16 @@ class ExportPesertaController extends BaseController
         $validator = Validator::make(Input::all(), $rules);
 
         if ($validator->passes()) {
-            
-			$data = Peserta::where('kegiatan_id', Input::get('kegiatan_id'))->get()->toArray();
-				   // dd($data);
-			return $data;
-			return Excel::create('biodata_peserta', function($excel) use ($data) {
-				$excel->sheet('mySheet', function($sheet) use ($data)
+			$presensi_ya = Peserta::where('kegiatan_id', Input::get('kegiatan_id'))->where('kehadiran', 1)->get()->toArray();
+			$presensi_tidak = Peserta::where('kegiatan_id', Input::get('kegiatan_id'))->where('kehadiran', 0)->get()->toArray();
+			return Excel::create('Biodata Peserta', function($excel) use ($presensi_ya, $presensi_tidak) {
+				$excel->sheet('Peserta Hadir', function($sheet) use ($presensi_ya)
 				{
-					$sheet->fromArray($data);
+					$sheet->fromArray($presensi_ya);
+                });
+                $excel->sheet('Peserta Tidak Hadir', function($sheet) use ($presensi_tidak)
+				{
+					$sheet->fromArray($presensi_tidak);
 				});
 			})->download('xlsx');
 
