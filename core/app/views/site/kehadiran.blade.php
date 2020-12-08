@@ -27,7 +27,7 @@
             </form>
             <div class="form-group">
               <!-- Button trigger modal -->
-            <a href="{{url('/forget-token')}}" class="btn btn-pill text-primary" data-toggle="modal"
+            <a href="{{url('/forget-token')}}" class="text-primary"
                 data-target="#exampleModalCenter">
                 Lupa token? klik disini.
               </a>
