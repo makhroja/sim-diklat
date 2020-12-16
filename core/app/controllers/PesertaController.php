@@ -235,6 +235,19 @@ class PesertaController extends BaseController
 			'provinsi' => 'required',
 		);
 
+		//check jika peserta duplicate berdasarkan kegiatan id, email, no hp, bisa di tmbahkan jika ada yg lain
+		$peserta = Peserta::where('kegiatan_id', Input::get('kegiatan_id'))
+			->where(function ($query) {
+				$query->orWhere('no_hp', Input::get('no_hp'))
+					->orWhere('email', Input::get('email'));
+			})->first();
+
+		if ($peserta == TRUE) {
+			return Redirect::to('/peserta/create')
+			->withInput()
+			->withErrors('info', 'Data peserta sudah ada');
+		}
+
 		// Validate the inputs
 		$validator = Validator::make(Input::all(), $rules);
 		$token = strtoupper(Input::get('kegiatan_id') . str_random(6));
