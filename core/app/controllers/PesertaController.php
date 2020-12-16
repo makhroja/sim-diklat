@@ -55,12 +55,23 @@ class PesertaController extends BaseController
 			'g-recaptcha-response' => 'required|captcha'
 		);
 
+		//check jika peserta duplicate berdasarkan kegiatan id, email, no hp, bisa di tmbahkan jika ada yg lain
+		$peserta = Peserta::where('kegiatan_id', Input::get('kegiatan_id'))
+			->where(function ($query) {
+				$query->orWhere('no_hp', Input::get('no_hp'))
+					->orWhere('email', Input::get('email'));
+			})->first();
+
+		if ($peserta == TRUE) {
+			return View::make('site.registrasi-duplicate', ['token' => $peserta->token]);
+		}
+
 		if (Input::get('sebagai') != 'Peserta') {
 			$kegiatan = Kegiatan::findOrFail(Input::get('kegiatan_id'));
 			if ($kegiatan->token != Input::get('token')) {
 				return Redirect::to('/registrasi' . '/' . Input::get('kegiatan_id'))
 					->withInput()
-					->with('error', 'Akses TOKEN di tolak');
+					->with('error', 'Silahkan masukan TOKEN untuk mendaftar selain Peserta');
 			}
 		}
 
@@ -308,9 +319,9 @@ class PesertaController extends BaseController
 	{
 		if ($kegiatan_id != '' and $kegiatan_id != 0) {
 			$query = Peserta::where('kegiatan_id', $kegiatan_id)->orderBy('nama_lengkap', 'asc');
-		} else{
+		} else {
 			$query = Peserta::query()->orderBy('nama_lengkap', 'asc');
-		} 
+		}
 
 		return Datatables::of($query)
 			->addColumn('kegiatan_id', function ($query) {
@@ -351,9 +362,9 @@ class PesertaController extends BaseController
 	{
 		if ($kegiatan_id != '0') {
 			$query = Peserta::where('kegiatan_id', $kegiatan_id)->select('nama_lengkap', 'instansi', 'token')->orderBy('nama_lengkap', 'asc');
-		} else{
+		} else {
 			$query = Peserta::where('kegiatan_id', $kegiatan_id)->orderBy('nama_lengkap', 'asc');
-		} 
+		}
 
 		return Datatables::of($query)
 
