@@ -10,4 +10,9 @@ class Kegiatan extends Eloquent{
     {
         return $this->hasMany(Peserta::class);
     }
+
+    public function setkehadiran()
+    {
+        return $this->hasOne(Setkehadiran::class);
+    }
 }

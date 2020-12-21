@@ -37,6 +37,11 @@
 				<input value="{{ $kegiatan->waktu }}" type="text" class="form-control" id="waktu" name="waktu">
 				{{ $errors->first('waktu', '<small class="help-block text-danger">:message</small>') }}
 			</div>
+			<div class="form-group {{ $errors->has('absensi') ? 'has-error' : '' }}">
+				<label for="exampleInputEmail1">Jumlah Absensi</label>
+				<input value="{{ !is_null($kegiatan->setkehadiran) ? $kegiatan->setkehadiran->first()->absensi : '' }}" type="number" class="form-control" id="absensi" name="absensi">
+				{{ $errors->first('absensi', '<small class="help-block text-danger">:message</small>') }}
+			</div>
 			<div class="form-group {{ $errors->has('penyelenggara') ? 'has-error' : '' }}">
 				<label for="exampleInputEmail1">Penyelenggara</label>
 				<input value="{{ $kegiatan->penyelenggara }}" type="text" class="form-control" id="penyelenggara"
@@ -83,6 +88,12 @@
 					<a href="{{url('/css/'.$kegiatan->id.'/edit')}}" class="btn btn-info">Edit Template Sertifikat</a>
 				</fieldset>
 				{{ $errors->first('css', '<small class="help-block text-danger">:message</small>') }} <br>
+			</div>
+			<div class="form-group {{ $errors->has('css') ? 'has-error' : '' }}">
+				<fieldset class="border p-2">
+					<legend class="w-auto">Setup Absensi</legend>
+					<a href="{{url('/set-kehadiran/'.$kegiatan->id.'')}}" class="btn btn-info">Setup Absensi</a>
+				</fieldset>
 			</div>
 			<input type="hidden" id="kegiatan_id" name="id" value="{{$kegiatan->id}}">
 		</div>

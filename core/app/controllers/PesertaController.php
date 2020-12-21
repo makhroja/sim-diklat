@@ -145,17 +145,65 @@ class PesertaController extends BaseController
 			$peserta = Peserta::where('kegiatan_id', Input::get('kegiatan_id'))
 				->where('token', Input::get('token'))
 				->firstOrFail();
-			if ($peserta->kehadiran == 0) {
-				$peserta->kehadiran = 1;
-			} else {
+
+			$absen_count = $peserta->absen_count;
+
+			$setkehadiran = Setkehadiran::where('kegiatan_id', 9)->firstOrFail();
+			$absensi = $setkehadiran->absensi;
+			$date = explode('|', $setkehadiran->date);
+			$start = explode('|', $setkehadiran->start);
+			$end = explode('|', $setkehadiran->end);
+			$datenow = date('Y-m-d');
+
+			// validasi absen di tanggal yang ditentukan
+			if ($absen_count != 0 and $absen_count > $absensi - 1) {
 				return Response::make([
-					'success' => 'Anda sudah menginput data kehadiran'
+					'success' => 'Anda sudah mengisi semua absensi',
+					'info' => 'Untuk mengunduh sertifikat silahkan &nbsp;<a href="'.url('/download/sertifikat').'/'.$peserta->kegiatan_id.'"> Klik Disini</a>'
 				], 200);
 			}
-			$peserta->save();
-			return Response::make([
-				'success' => 'Kehadiran berhasil diinput'
-			], 200);
+
+			if ($date[$absen_count] == $datenow) {
+
+				// validasi absen di rentang waktu yang ditentukan
+				if (strtotime(date("H:i")) >= strtotime($start[$absen_count]) and strtotime(date("H:i")) <= strtotime($end[$absen_count])) {
+					// return 'haiya';
+					if ($absen_count < $absensi) {
+						# code...
+						Peserta::where('kegiatan_id', 9)->where('token', Input::get('token'))->update([
+							'absen_count' => $absen_count + 1,
+						]);
+					}
+
+					if ($absen_count == $absensi - 1) {
+						Peserta::where('kegiatan_id', 9)->where('token', Input::get('token'))->update([
+							'kehadiran' => 1,
+						]);
+
+						return Response::make([
+							'success' => 'Anda sudah mengisi semua absensi',
+							'info' => 'Untuk mengunduh sertifikat silahkan &nbsp;<a href="'.url('/download/sertifikat').'/'.$peserta->kegiatan_id.'"> Klik Disini</a>'
+						], 200);
+					}
+
+					return Response::make([
+						'success' => 'Kehadiran berhasil diinput',
+						'info' => '<p class="text-center">Anda sudah absen sebanyak'.$peserta->absen_count + 1 .' dari total absensi &nbsp;'.$absensi. '</p>',
+					], 200);
+
+				} else {
+					return Response::make([
+						'Error' => 'Silahkan melakukan absensi pada jam yang ditentukan',
+						'info' => '<p class="text-center">Silahkan mengikuti seluruh rangkaian kegiatan, jadwal pengisian absensi akan di umumkan pada saat kegiatan berlangsung.</p>',
+					], 404);
+				}
+			} else {
+				return Response::make([
+					'Error' => 'Silahkan melakukan absensi di tanggal yang ditentukan',
+					'info' => '<p class="text-center">Silahkan mengikuti seluruh rangkaian kegiatan, jadwal pengisian absensi akan di umumkan pada saat kegiatan berlangsung.</p>',
+				], 404);
+			}
+
 		} catch (\Exception $e) {
 			return View::make('errors.404');
 		}
@@ -165,18 +213,16 @@ class PesertaController extends BaseController
 	{
 		# code...
 		$query = Peserta::where('kegiatan_id', $kegiatan_id)
-			->where('kehadiran', 1)
 			->orderBy('id', 'desc');
+
 		return Datatables::of($query)
 			->addColumn('status', function ($query) {
-				if ($query->kehadiran == 1) {
-					$status = 'Hadir';
+				$absensi = Setkehadiran::where('kegiatan_id', $query->kegiatan_id)->first()->absensi;
+				if ($query->kehadiran == 1 and $query->absen_count == $absensi) {
+					$kehadiran = ' <span class="badge badge-success"> Ya </span>';
 				} else {
-					$status = 'Tidak hadir';
+					$kehadiran = $query->absen_count.' dari '.$absensi;
 				}
-
-				$kehadiran = ' <span class="badge badge-success">' . $status . '</span>';
-
 				return $kehadiran;
 			})
 			->addColumn('null', function () {
@@ -189,11 +235,13 @@ class PesertaController extends BaseController
 	public function post_kehadiran($id)
 	{
 		$peserta = Peserta::findOrFail($id);
-
+		$kegiatan = Kegiatan::findOrFail($peserta->kegiatan_id);
 		if ($peserta->kehadiran == 1) {
 			$peserta->kehadiran = 0;
+			$peserta->absen_count = 0;
 		} else {
 			$peserta->kehadiran = 1;
+			$peserta->absen_count = $kegiatan->setkehadiran->first()->absensi;
 		}
 		$peserta->save();
 		return Response::make([
@@ -244,8 +292,8 @@ class PesertaController extends BaseController
 
 		if ($peserta == TRUE) {
 			return Redirect::to('/peserta/create')
-			->withInput()
-			->withErrors('info', 'Data peserta sudah ada');
+				->withInput()
+				->withErrors('error', 'Data peserta sudah ada');
 		}
 
 		// Validate the inputs

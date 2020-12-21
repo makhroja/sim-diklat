@@ -17,16 +17,16 @@ Route::get('/', function () {
 	return View::make('site.home');
 });
 
-Route::get('/download/sertifikat/{id}', [ 'as' => 'download', 'uses' => 'SiteController@download']);
-Route::get('/daftar-kegiatan', [ 'as' => 'daftar-kegiatan.certificate', 'uses' => 'SiteController@daftar_kegiatan']);
-Route::get('/download/sertifikat/result/print/{data}', [ 'as' => 'print.certificate', 'uses' => 'SiteController@print_certificate']);
-Route::get('/api-certificate/{kegiatan_id}/{data}', [ 'as' => 'api.certificate', 'uses' => 'SiteController@api_certificate']);
-Route::get('/get-certificate/{kegiatan_id}', [ 'as' => 'get.certificate', 'uses' => 'SiteController@api_certificate']);
-Route::get('/get-kegiatan', [ 'as' => 'get.kegiatan', 'uses' => 'SiteController@api_kegiatan']);
+Route::get('/download/sertifikat/{id}', ['as' => 'download', 'uses' => 'SiteController@download']);
+Route::get('/daftar-kegiatan', ['as' => 'daftar-kegiatan.certificate', 'uses' => 'SiteController@daftar_kegiatan']);
+Route::get('/download/sertifikat/result/print/{data}', ['as' => 'print.certificate', 'uses' => 'SiteController@print_certificate']);
+Route::get('/api-certificate/{kegiatan_id}/{data}', ['as' => 'api.certificate', 'uses' => 'SiteController@api_certificate']);
+Route::get('/get-certificate/{kegiatan_id}', ['as' => 'get.certificate', 'uses' => 'SiteController@api_certificate']);
+Route::get('/get-kegiatan', ['as' => 'get.kegiatan', 'uses' => 'SiteController@api_kegiatan']);
 
-Route::get('/verification', [ 'as' => 'verification.certificate', 'uses' => 'SiteController@verification']);
-Route::get('/verification/{data}', [ 'as' => 'verification.certificate', 'uses' => 'SiteController@get_verification']);
-Route::post('/verification', [ 'as' => 'verification.certificate', 'uses' => 'SiteController@post_verification']);
+Route::get('/verification', ['as' => 'verification.certificate', 'uses' => 'SiteController@verification']);
+Route::get('/verification/{data}', ['as' => 'verification.certificate', 'uses' => 'SiteController@get_verification']);
+Route::post('/verification', ['as' => 'verification.certificate', 'uses' => 'SiteController@post_verification']);
 
 Route::get('/registrasi/{kegiatan_id}', ['as' => 'registrasi', 'uses' => 'PesertaController@registrasi']);
 
@@ -56,8 +56,13 @@ Route::group(['before' => 'auth'], function () {
 	Route::get('/kegiatan/{id}/close', 'KegiatanController@close');
 	Route::get('/kegiatan/{id}/close-kehadiran', 'KegiatanController@close_kehadiran');
 	Route::get('/api-kegiatan', ['as' => 'api.kegiatan', 'uses' => 'KegiatanController@api_kegiatan']);
-    	Route::get('/kegiatan/{id}/close-sertifikat', 'KegiatanController@close_sertifikat');
+	Route::get('/kegiatan/{id}/close-sertifikat', 'KegiatanController@close_sertifikat');
 	Route::get('/kegiatan/{id}/visible', 'KegiatanController@visible');
+
+	//set kehadiran
+	Route::get('/set-kehadiran/{kegiatan_id}', 'KegiatanController@set_kehadiran');
+
+	Route::post('/set-kehadiran', 'KegiatanController@post_set_kehadiran');
 
 	//css editor
 	Route::get('/css/{id}/edit', 'KegiatanController@css_edit');
@@ -83,6 +88,6 @@ Route::group(['before' => 'auth'], function () {
 	#Export Peserta
 	Route::get('/peserta/export-peserta', 'ExportPesertaController@index');
 	Route::post('/peserta/export-peserta', ['as' => 'export.peserta', 'uses' => 'ExportPesertaController@export_peserta']);
-	
+
 	Route::get('/dashboard', ['before' => 'auth', 'uses' => 'DashboardController@dashboard']);
 });

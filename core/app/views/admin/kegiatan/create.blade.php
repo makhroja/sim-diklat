@@ -29,6 +29,11 @@
 			<input value="{{ Input::old('waktu') }}" type="text" class="form-control" id="waktu" name="waktu">
 			{{ $errors->first('waktu', '<small class="help-block text-danger">:message</small>') }}
 		</div>
+		<div class="form-group {{ $errors->has('absensi') ? 'has-error' : '' }}">
+			<label for="exampleInputEmail1">Jumlah Absensi</label>
+			<input value="{{ Input::old('absensi') }}" type="number" class="form-control" id="absensi" name="absensi">
+			{{ $errors->first('absensi', '<small class="help-block text-danger">:message</small>') }}
+		</div>
 		<div class="form-group {{ $errors->has('penyelenggara') ? 'has-error' : '' }}">
 			<label for="exampleInputEmail1">Penyelenggara</label>
 			<input value="{{ Input::old('penyelenggara') }}" type="text" class="form-control" id="penyelenggara"
@@ -37,7 +42,7 @@
 		</div>
 		<div class="form-group {{ $errors->has('kuota') ? 'has-error' : '' }}">
 			<label for="exampleInputEmail1">Kuota</label>
-			<input value="{{ Input::old('kuota') }}" type="text" class="form-control" id="kuota"
+			<input value="{{ Input::old('kuota') }}" type="number" class="form-control" id="kuota"
 				name="kuota">
 			{{ $errors->first('kuota', '<small class="help-block text-danger">:message</small>') }}
 		</div>

@@ -24,6 +24,7 @@ class KegiatanController extends BaseController
 		$rules = array(
 			'nama_kegiatan' => 'required',
 			'waktu' => 'required',
+			'absensi' => 'required|numeric',
 			'penyelenggara' => 'required',
 			'css' => 'required',
 			'kuota' => 'required',
@@ -34,9 +35,15 @@ class KegiatanController extends BaseController
 		if ($validator->passes()) {
 			$token = strtoupper(str_random(6));
 			// input ke db
-			Kegiatan::create(array_merge(Input::all(), [
+			$kegiatan = Kegiatan::create(array_merge(Input::all(), [
 				'token' => $token
 			]));
+
+			//input jumlah absensi
+			$kegiatan->setkehadiran()->create([
+				'absensi' => Input::get('absensi'),
+			]);
+
 			return Redirect::to('/kegiatan')->with('success', 'Data berhasil disimpan');
 		} else {
 			return Redirect::to('/kegiatan/create')
@@ -63,6 +70,7 @@ class KegiatanController extends BaseController
 		$rules = array(
 			'nama_kegiatan' => 'required',
 			'waktu' => 'required',
+			'absensi' => 'required|numeric',
 			'penyelenggara' => 'required',
 			'kuota' => 'required',
 			//'css' => 'required',
@@ -91,6 +99,7 @@ class KegiatanController extends BaseController
 				$file->move('public/images/', $image);
 
 				Kegiatan::where('id', $id)->update([
+					'no_sertifikat' => Input::get('no_sertifikat'),
 					'nama_kegiatan' => Input::get('nama_kegiatan'),
 					'judul' => Input::get('judul'),
 					'waktu' => Input::get('waktu'),
@@ -101,11 +110,18 @@ class KegiatanController extends BaseController
 					'image' => $image,
 
 				]);
+
+				//update jumlah absensi
+				Setkehadiran::where('kegiatan_id', $id)->update([
+					'absensi' => Input::get('absensi'),
+				]);	
+
 				return Redirect::to('/css' . '/' . $id . '/edit')->with('success', 'Template berhasil disimpan');
 			}
 
 			// if no image
 			Kegiatan::where('id', $id)->update([
+				'no_sertifikat' => Input::get('no_sertifikat'),
 				'nama_kegiatan' => Input::get('nama_kegiatan'),
 				'judul' => Input::get('judul'),
 				'waktu' => Input::get('waktu'),
@@ -114,6 +130,11 @@ class KegiatanController extends BaseController
 				'link_materi' => Input::get('link_materi'),
 				'kuota' => Input::get('kuota'),
 
+			]);
+
+			//update jumlah absensi
+			Setkehadiran::where('kegiatan_id', $id)->update([
+				'absensi' => Input::get('absensi'),
 			]);
 
 			return Redirect::to('/kegiatan')->with('success', 'Data berhasil disimpan');
@@ -361,6 +382,70 @@ class KegiatanController extends BaseController
 		}
 
 		return Redirect::to('/kegiatan')->with('success', 'Visible kegiatan ' . $kegiatan->nama_kegiatan . ' ' . $visible . '');
+	}
+
+	public function set_kehadiran($kegiatan_id)
+	{
+
+		$setkehadiran = Setkehadiran::where('kegiatan_id', $kegiatan_id)->first();
+
+		if ($setkehadiran->date != null) {
+			$date = explode('|', $setkehadiran->date);
+			$start = explode('|', $setkehadiran->start);
+			$end = explode('|', $setkehadiran->end);
+		} else {
+			$date = '';
+			$start = '';
+			$end = '';
+		}
+
+		if ($date != '' and $setkehadiran->absensi >= count($date)) {
+			$count = count($date);
+		}else{
+			$count = $setkehadiran->absensi;
+		}
+
+		return View::make('admin.kegiatan.set-kehadiran', [
+			'setkehadiran' => $setkehadiran,
+			'date' => $date,
+			'start' => $start,
+			'end' => $end,
+			'count' => $count,
+			'more' => $setkehadiran->absensi - $count
+		]);
+	}
+
+	public function post_set_kehadiran()
+	{
+
+		// return Input::all();
+		$rules = array(
+			'id' => 'required',
+			'date' => 'required',
+			'start' => 'required',
+			'end' => 'required',
+		);
+		// Validate the inputs
+		$validator = Validator::make(Input::all(), $rules);
+
+		if ($validator->passes()) {
+
+			$date = implode('|', Input::get('date'));
+			$start = implode('|', Input::get('start'));
+			$end = implode('|', Input::get('end'));
+
+			$setkehadiran = Setkehadiran::findOrFail(Input::get('id'));
+			$setkehadiran->update([
+				'date' => $date,
+				'start' => $start,
+				'end' => $end,
+			]);
+			return Redirect::to('/set-kehadiran' . '/' . $setkehadiran->kegiatan_id)->with('success', 'Set Absensi Berhasil');
+		} else {
+			return Redirect::to('/set-kehadiran' . '/' . $setkehadiran->kegiatan_id)
+				->withInput()
+				->withErrors($validator);
+		}
 	}
 
 	public function api_kegiatan()
