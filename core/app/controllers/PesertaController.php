@@ -148,7 +148,7 @@ class PesertaController extends BaseController
 
 			$absen_count = $peserta->absen_count;
 
-			$setkehadiran = Setkehadiran::where('kegiatan_id', 9)->firstOrFail();
+			$setkehadiran = Setkehadiran::where('kegiatan_id', Input::get('kegiatan_id'))->firstOrFail();
 			$absensi = $setkehadiran->absensi;
 			$date = explode('|', $setkehadiran->date);
 			$start = explode('|', $setkehadiran->start);
@@ -170,13 +170,13 @@ class PesertaController extends BaseController
 					// return 'haiya';
 					if ($absen_count < $absensi) {
 						# code...
-						Peserta::where('kegiatan_id', 9)->where('token', Input::get('token'))->update([
+						Peserta::where('kegiatan_id', Input::get('kegiatan_id'))->where('token', Input::get('token'))->update([
 							'absen_count' => $absen_count + 1,
 						]);
 					}
 
 					if ($absen_count == $absensi - 1) {
-						Peserta::where('kegiatan_id', 9)->where('token', Input::get('token'))->update([
+						Peserta::where('kegiatan_id', Input::get('kegiatan_id'))->where('token', Input::get('token'))->update([
 							'kehadiran' => 1,
 						]);
 
