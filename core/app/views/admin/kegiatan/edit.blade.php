@@ -39,7 +39,7 @@
 			</div>
 			<div class="form-group {{ $errors->has('absensi') ? 'has-error' : '' }}">
 				<label for="exampleInputEmail1">Jumlah Absensi</label>
-				<input value="{{ !is_null($kegiatan->setkehadiran) ? $kegiatan->setkehadiran->first()->absensi : '' }}" type="number" class="form-control" id="absensi" name="absensi">
+				<input value="{{ !is_null($kegiatan->setkehadiran) ? $kegiatan->setkehadiran->absensi : '' }}" type="number" class="form-control" id="absensi" name="absensi">
 				{{ $errors->first('absensi', '<small class="help-block text-danger">:message</small>') }}
 			</div>
 			<div class="form-group {{ $errors->has('penyelenggara') ? 'has-error' : '' }}">
