@@ -205,7 +205,10 @@ class PesertaController extends BaseController
 			}
 
 		} catch (\Exception $e) {
-			return View::make('errors.404');
+			return Response::make([
+				'Error' => 'Token yang anda masukan tidak ditemukan',
+				'info' => '<p class="text-center">Silahkan cek kembali token atau <a href='.url('/forget-token').'>klik lupa token </a> untuk mengetahui token anda</p>',
+			], 404);
 		}
 	}
 
